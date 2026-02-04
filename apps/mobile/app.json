@@ -1,0 +1,46 @@
+{
+    "expo": {
+        "name": "Babki",
+        "slug": "babki",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "automatic",
+        "newArchEnabled": true,
+        "scheme": "babki",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#0F172A"
+        },
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.babki.antidelay"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#0F172A"
+            },
+            "package": "com.babki.antidelay"
+        },
+        "web": {
+            "bundler": "metro",
+            "output": "single",
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-router",
+            [
+                "expo-notifications",
+                {
+                    "icon": "./assets/notification-icon.png",
+                    "color": "#22C55E"
+                }
+            ]
+        ],
+        "experiments": {
+            "typedRoutes": true
+        }
+    }
+}
