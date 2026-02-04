@@ -1,8 +1,9 @@
 import { Platform } from 'react-native';
 
 // In dev, use localhost. In prod, this would be your deployed URL.
-// Android Emulator uses 10.0.2.2 usually, but for Web (Mini App) localhost is fine.
-const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3001' : 'http://localhost:3001';
+const API_URL = __DEV__
+    ? (Platform.OS === 'android' ? 'http://10.0.2.2:3001' : 'http://localhost:3001')
+    : 'https://dolg0k.onrender.com';
 
 export type UserRegistration = {
     telegram_id?: string;
