@@ -3,7 +3,7 @@
  * Style: Obsidian Tech Premium
  */
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, useWindowDimensions, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, useWindowDimensions, ViewStyle, TouchableOpacity } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import type { Obligation, RiskResult } from '../src/core';
@@ -22,6 +22,14 @@ export default function DashboardScreen() {
     const [riskResult, setRiskResult] = useState<RiskResult | null>(null);
     const [refreshing, setRefreshing] = useState(false);
     const [balance, setBalance] = useState(0);
+
+    // Menu State
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        // Simple animation
+        setIsMenuOpen(prev => !prev);
+    };
 
     const loadData = useCallback(async () => {
         const storage = getStorage();
@@ -71,12 +79,22 @@ export default function DashboardScreen() {
         >
             <AmbientHeader />
 
-            {/* Header Row */}
+            {/* Header Row (Interactive) */}
             <View style={styles.header}>
-                <View>
-                    <Text style={styles.headerTitle}>Обзор</Text>
-                    <Text style={styles.headerSubtitle}>Финансовая сводка</Text>
-                </View>
+                <TouchableOpacity onPress={toggleMenu} activeOpacity={0.7} style={styles.headerTitleRow}>
+                    <View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            <Text style={styles.headerTitle}>Обзор</Text>
+                            <Feather
+                                name={isMenuOpen ? "chevron-up" : "chevron-down"}
+                                size={28}
+                                color={colors.accent}
+                            />
+                        </View>
+                        <Text style={styles.headerSubtitle}>Финансовая сводка</Text>
+                    </View>
+                </TouchableOpacity>
+
                 {riskResult && (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
                         {/* 3D Orb for Status */}
@@ -93,6 +111,44 @@ export default function DashboardScreen() {
                 )}
             </View>
 
+            {/* Collapsible Menu */}
+            {isMenuOpen && (
+                <View style={styles.menuContainer}>
+                    <GlassCard variant="surface2" style={styles.menuCard}>
+                        <View style={styles.menuGrid}>
+                            <Button
+                                title="Фин. Тест"
+                                variant="primary"
+                                onPress={() => { toggleMenu(); router.push('/financial-test'); }}
+                                icon={<Feather name="check-square" size={18} color={colors.textOnAccent} />}
+                                style={styles.menuBtn}
+                            />
+                            <Button
+                                title="Добавить"
+                                variant="primary"
+                                onPress={() => { toggleMenu(); router.push('/add-payment'); }}
+                                icon={<Feather name="plus" size={18} color={colors.textOnAccent} />}
+                                style={styles.menuBtn}
+                            />
+                            <Button
+                                title="Бюджеты"
+                                variant="secondary"
+                                onPress={() => { toggleMenu(); router.push('/budgets'); }}
+                                icon={<Feather name="pie-chart" size={18} color={colors.textPrimary} />}
+                                style={styles.menuBtn}
+                            />
+                            <Button
+                                title="Шаблоны"
+                                variant="ghost"
+                                onPress={() => { toggleMenu(); router.push('/templates'); }}
+                                icon={<Feather name="copy" size={18} color={colors.accent} />}
+                                style={styles.menuBtn}
+                            />
+                        </View>
+                    </GlassCard>
+                </View>
+            )}
+
             {/* KPI Row (3-4 cards) */}
             <View style={styles.kpiRow}>
                 <KpiCard label="К оплате (7 дней)" value={totalUnpaid} icon="credit-card" />
@@ -103,8 +159,8 @@ export default function DashboardScreen() {
             {/* Main Content Grid */}
             <View style={[styles.mainGrid, isDesktop && styles.desktopGrid]}>
 
-                {/* Left: Upcoming (Flex 2 on desktop) */}
-                <View style={[styles.column, isDesktop && { flex: 2 }]}>
+                {/* Left: Upcoming (Main content) */}
+                <View style={[styles.column, { flex: 1 }]}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Ближайшие платежи</Text>
                         <PressableText text="Все" onPress={() => router.push('/payments')} />
@@ -135,47 +191,14 @@ export default function DashboardScreen() {
                     </Card>
                 </View>
 
-                {/* Right: Actions & Signals (Flex 1 on desktop) */}
-                <View style={[styles.column, isDesktop && { flex: 1 }]}>
+                {/* Right: Signals & Emergency (Side panel) */}
+                {/* Actions have been moved to top menu */}
+                <View style={[styles.column, isDesktop && { flex: 0.5, minWidth: 300 }]}>
 
-                    {/* Actions Panel */}
-                    <Card style={styles.actionsPanel}>
-                        <View style={styles.panelHeader}>
-                            <Text style={typography.h3}>Действия</Text>
-                        </View>
-                        <Button
-                            title="Пройти Фин. Тест"
-                            variant="primary"
-                            fullWidth
-                            onPress={() => router.push('/financial-test')}
-                            style={{ marginBottom: spacing.md }}
-                            icon={<Feather name="check-square" size={18} color={colors.textOnAccent} />}
-                        />
-                        <Button
-                            title="Добавить платёж"
-                            variant="primary"
-                            fullWidth
-                            onPress={() => router.push('/add-payment')}
-                            style={{ marginBottom: spacing.md }}
-                        />
-                        <Button
-                            title="Бюджеты"
-                            variant="secondary"
-                            fullWidth
-                            onPress={() => router.push('/budgets')}
-                            style={{ marginBottom: spacing.md }}
-                        />
-
-                        <Button
-                            title="Шаблоны"
-                            variant="ghost"
-                            fullWidth
-                            onPress={() => router.push('/templates')}
-                        />
-                    </Card>
-
-                    {/* Signals */}
-                    <Text style={[styles.sectionTitle, { marginTop: spacing.lg, marginBottom: spacing.md }]}>Сигналы</Text>
+                    {/* Signals - Always visible */}
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Сигналы</Text>
+                    </View>
                     <Card padding="none">
                         <ListRow title="Напоминания" subtitle="09:00" icon="bell" style={{ height: 48 }} />
                         <ListRow title="Зарплата" subtitle="10 число" icon="calendar" style={{ height: 48, borderBottomWidth: 0 }} />
@@ -356,5 +379,24 @@ const styles = StyleSheet.create({
         ...typography.caption,
         color: colors.textSecondary,
         marginLeft: 4,
+    },
+    headerTitleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuContainer: {
+        marginBottom: spacing.lg,
+    },
+    menuCard: {
+        padding: spacing.md,
+    },
+    menuGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: spacing.sm,
+    },
+    menuBtn: {
+        flex: 1,
+        minWidth: '45%', // 2 per row
     }
 });

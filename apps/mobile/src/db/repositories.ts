@@ -285,6 +285,7 @@ export async function getSettings(): Promise<UserSettings> {
         notificationTime: settingsMap.notificationTime ?? DEFAULT_SETTINGS.notificationTime,
         onboardingCompleted: settingsMap.onboardingCompleted === 'true',
         currentBalance: settingsMap.currentBalance ? parseFloat(settingsMap.currentBalance) : undefined,
+        userName: settingsMap.userName ?? undefined,
     };
 }
 
@@ -314,6 +315,9 @@ export async function saveSettings(userSettings: UserSettings): Promise<void> {
     await setSetting('onboardingCompleted', userSettings.onboardingCompleted);
     if (userSettings.currentBalance !== undefined) {
         await setSetting('currentBalance', userSettings.currentBalance);
+    }
+    if (userSettings.userName !== undefined) {
+        await setSetting('userName', userSettings.userName);
     }
 }
 

@@ -161,6 +161,8 @@ export interface UserSettings {
     onboardingCompleted: boolean;
     /** Текущий баланс (опционально, вводится пользователем) */
     currentBalance?: number;
+    /** Имя пользователя */
+    userName?: string;
     /** ID активного плана (если есть) */
     activePlanId?: string;
 }

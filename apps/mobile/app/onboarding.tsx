@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getStorage } from '../src/db';
 import { Select, Button } from '../src/components';
@@ -17,17 +17,24 @@ const DAY_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
 export default function OnboardingScreen() {
     const router = useRouter();
     const [step, setStep] = useState(1);
+    const [name, setName] = useState('');
     const [salaryDay, setSalaryDay] = useState('10');
     const [notificationTime] = useState('09:00');
 
+    const handleNext = () => setStep(step + 1);
+
     const handleComplete = async () => {
         const storage = getStorage();
+        // Save intermediate settings
+        // We do NOT set onboardingCompleted: true here, because we want to flow into Financial Test
         await storage.saveSettings({
+            userName: name,
             salaryDay: parseInt(salaryDay, 10),
             notificationTime,
-            onboardingCompleted: true,
+            onboardingCompleted: false,
         });
-        router.replace('/');
+        // Proceed to Questionnaire
+        router.replace('/financial-test');
     };
 
     return (
@@ -35,12 +42,36 @@ export default function OnboardingScreen() {
             <View style={styles.content}>
                 {/* Progress */}
                 <View style={styles.progress}>
-                    {[1, 2].map(s => (
+                    {[1, 2, 3].map(s => (
                         <View key={s} style={[styles.progressDot, s <= step && styles.progressDotActive]} />
                     ))}
                 </View>
 
                 {step === 1 && (
+                    <>
+                        <Text style={styles.emoji}>👋</Text>
+                        <Text style={styles.title}>Давайте знакомиться</Text>
+                        <Text style={styles.subtitle}>Как к вам обращаться?</Text>
+
+                        <TextInput
+                            style={styles.input}
+                            value={name}
+                            onChangeText={setName}
+                            placeholder="Ваше имя"
+                            placeholderTextColor={colors.textTertiary}
+                        />
+
+                        <Button
+                            title="Далее"
+                            onPress={handleNext}
+                            fullWidth
+                            style={styles.btn}
+                            disabled={!name.trim()}
+                        />
+                    </>
+                )}
+
+                {step === 2 && (
                     <>
                         <Text style={styles.emoji}>💰</Text>
                         <Text style={styles.title}>Когда зарплата?</Text>
@@ -52,11 +83,14 @@ export default function OnboardingScreen() {
                             onValueChange={setSalaryDay}
                         />
 
-                        <Button title="Далее" onPress={() => setStep(2)} fullWidth style={styles.btn} />
+                        <View style={{ gap: spacing.md, marginTop: spacing.lg }}>
+                            <Button title="Далее" onPress={handleNext} fullWidth />
+                            <Button title="Назад" onPress={() => setStep(1)} variant="ghost" fullWidth />
+                        </View>
                     </>
                 )}
 
-                {step === 2 && (
+                {step === 3 && (
                     <>
                         <Text style={styles.emoji}>🔔</Text>
                         <Text style={styles.title}>Напоминания</Text>
@@ -66,8 +100,8 @@ export default function OnboardingScreen() {
                             <Text style={styles.timeText}>Время: {notificationTime}</Text>
                         </View>
 
-                        <Button title="Начать" onPress={handleComplete} fullWidth style={styles.btn} />
-                        <Button title="Назад" onPress={() => setStep(1)} variant="ghost" fullWidth />
+                        <Button title="Далее: Анкета" onPress={handleComplete} fullWidth style={styles.btn} />
+                        <Button title="Назад" onPress={() => setStep(2)} variant="ghost" fullWidth />
                     </>
                 )}
             </View>
@@ -77,7 +111,7 @@ export default function OnboardingScreen() {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.bg0 },
-    content: { flex: 1, padding: spacing.xl, justifyContent: 'center' },
+    content: { flex: 1, padding: spacing.xl, justifyContent: 'center', maxWidth: 400, alignSelf: 'center', width: '100%' },
     progress: { flexDirection: 'row', justifyContent: 'center', marginBottom: spacing.xl, gap: spacing.sm },
     progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.stroke1 },
     progressDotActive: { backgroundColor: colors.accent, width: 24 },
@@ -87,4 +121,15 @@ const styles = StyleSheet.create({
     timeInfo: { backgroundColor: colors.surface1, padding: spacing.lg, borderRadius: radius.ui, alignItems: 'center', marginBottom: spacing.lg },
     timeText: { ...typography.h3 },
     btn: { marginTop: spacing.md },
+    input: {
+        backgroundColor: colors.surface1,
+        color: colors.textPrimary,
+        padding: spacing.lg,
+        borderRadius: radius.ui,
+        borderWidth: 1,
+        borderColor: colors.stroke1,
+        fontSize: 18,
+        marginBottom: spacing.lg,
+        textAlign: 'center'
+    }
 });

@@ -34,7 +34,7 @@ export default function RootLayout() {
                     // We can't easily check segments inside init async immediately, 
                     // but we can trust this runs once on mount.
                     setTimeout(() => {
-                        router.replace('/financial-test');
+                        router.replace('/onboarding');
                     }, 100);
                 }
             } catch (error) {
