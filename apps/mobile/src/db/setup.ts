@@ -12,6 +12,7 @@ const DB_NAME = 'babki.db';
 let drizzle: any;
 let openDatabaseSync: any;
 
+// Only import native modules on native platforms
 if (Platform.OS !== 'web') {
   try {
     drizzle = require('drizzle-orm/expo-sqlite').drizzle;
@@ -20,22 +21,21 @@ if (Platform.OS !== 'web') {
     console.warn('SQLite setup failed:', e);
   }
 }
-import * as schema from './schema';
-
-// Database name
-const DB_NAME = 'babki.db';
 
 // Create database connection
-let db: ReturnType<typeof drizzle<typeof schema>> | null = null;
+let db: any = null;
 
 /**
  * Получает или создаёт подключение к базе данных
  */
 export function getDatabase() {
+  if (Platform.OS === 'web') return null; // No SQLite on Web
   if (db) return db;
 
-  const sqlite = openDatabaseSync(DB_NAME);
-  db = drizzle(sqlite, { schema });
+  if (openDatabaseSync && drizzle) {
+    const sqlite = openDatabaseSync(DB_NAME);
+    db = drizzle(sqlite, { schema });
+  }
 
   return db;
 }
@@ -44,6 +44,10 @@ export function getDatabase() {
  * Инициализирует схему базы данных
  */
 export async function initDatabase(): Promise<void> {
+  if (Platform.OS === 'web') return; // No init on Web
+
+  if (!openDatabaseSync || !drizzle) return;
+
   const sqlite = openDatabaseSync(DB_NAME);
 
   // Create tables if not exist
@@ -112,6 +116,10 @@ export async function initDatabase(): Promise<void> {
  * Удаляет все данные (для Settings > Удалить данные)
  */
 export async function clearAllData(): Promise<void> {
+  if (Platform.OS === 'web') return;
+
+  if (!openDatabaseSync) return;
+
   const sqlite = openDatabaseSync(DB_NAME);
 
   sqlite.execSync(`
@@ -124,4 +132,4 @@ export async function clearAllData(): Promise<void> {
 /**
  * Экспортирует тип базы данных для использования в репозиториях
  */
-export type AppDatabase = ReturnType<typeof getDatabase>;
+export type AppDatabase = any; 
