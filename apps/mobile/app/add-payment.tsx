@@ -6,8 +6,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import type { PaymentCategory } from '@babki/core';
-import { CATEGORY_LABELS } from '@babki/core';
+import type { PaymentCategory } from '../src/core';
+import { CATEGORY_LABELS } from '../src/core';
 import { getStorage } from '../src/db';
 import { Input, Select, Button } from '../src/components';
 import { colors, spacing, typography } from '../src/theme';

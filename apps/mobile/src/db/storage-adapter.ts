@@ -4,8 +4,8 @@
  */
 
 import { Platform } from 'react-native';
-import { PlanInstance, PlanRule, PlanGenerator, calculateRisk } from '@babki/core';
-import type { Obligation, PlanAction, UserSettings, Budget, BudgetCategory, BudgetSpend } from '@babki/core';
+import { PlanInstance, PlanRule, PlanGenerator, calculateRisk } from '../core';
+import type { Obligation, PlanAction, UserSettings, Budget, BudgetCategory, BudgetSpend } from '../core';
 
 // Storage interface
 export interface StorageAdapter {

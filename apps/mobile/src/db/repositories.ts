@@ -4,8 +4,8 @@
  */
 
 import { eq } from 'drizzle-orm';
-import type { Obligation, PlanAction, UserSettings } from '@babki/core';
-import { PlanGenerator, PlanInstance, PlanRule, calculateRisk } from '@babki/core';
+import type { Obligation, PlanAction, UserSettings } from '../core';
+import { PlanGenerator, PlanInstance, PlanRule, calculateRisk } from '../core';
 import { getDatabase } from './setup';
 import { obligations, planActions, settings, planInstances, planRules } from './schema';
 

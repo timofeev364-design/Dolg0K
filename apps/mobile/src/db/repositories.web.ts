@@ -3,8 +3,8 @@
  * Реализация репозиториев для веба через localStorage
  */
 
-import type { Obligation, PlanAction, UserSettings, PlanInstance, PlanRule } from '@babki/core';
-import { PlanGenerator, calculateRisk } from '@babki/core';
+import type { Obligation, PlanAction, UserSettings, PlanInstance, PlanRule } from '../core';
+import { PlanGenerator, calculateRisk } from '../core';
 
 // Keys for localStorage
 const KB_OBLIGATIONS = 'babki_obligations';

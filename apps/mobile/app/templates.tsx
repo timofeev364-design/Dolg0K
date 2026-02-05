@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
-import { TEMPLATES } from '@babki/core';
-import type { Template } from '@babki/core';
+import { TEMPLATES } from '../src/core';
+import type { Template } from '../src/core';
 import { ListRow, SegmentedControl } from '../src/components';
 import { colors, spacing, radius, typography } from '../src/theme';
 

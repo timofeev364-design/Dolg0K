@@ -1,6 +1,6 @@
 {
-    "framework": "other",
     "buildCommand": "npm run build",
+    "installCommand": "npm install --legacy-peer-deps",
     "outputDirectory": "dist",
     "devCommand": "npm run web",
     "rewrites": [

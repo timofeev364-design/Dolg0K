@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import type { PlanAction } from '@babki/core';
+import type { PlanAction } from '../core';
 import { colors, spacing, radius, typography } from '../theme';
 interface ActionItemProps {
     action: PlanAction;

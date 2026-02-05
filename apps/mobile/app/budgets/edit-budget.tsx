@@ -4,7 +4,7 @@ import { Stack, useRouter } from 'expo-router';
 import { colors, spacing, radius, typography } from '@/theme';
 import { Button, Select } from '@/components';
 import { GlassCard, TechGrid } from '@/components/ui/PremiumComponents';
-import { calculateEWMA, calculateStandardDeviation } from '@babki/core';
+import { calculateEWMA, calculateStandardDeviation } from '../../src/core';
 
 export default function EditBudgetScreen() {
     const router = useRouter();

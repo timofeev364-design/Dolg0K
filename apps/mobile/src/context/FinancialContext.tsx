@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Budget } from '@babki/core';
+import { Budget } from '../core';
 import { Envelope } from '../logic/math/envelopeFormulas';
 import { Debt } from '../logic/math/debtFormulas';
 

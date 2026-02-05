@@ -2,8 +2,8 @@
  * Plan7 generation tests
  */
 
-import { generatePlan7, getWeekStart, isPlanCurrentWeek } from '@babki/core';
-import type { Obligation, RiskResult } from '@babki/core';
+import { generatePlan7, getWeekStart, isPlanCurrentWeek } from '../src/core';
+import type { Obligation, RiskResult } from '../src/core';
 
 const createObligation = (overrides: Partial<Obligation> = {}): Obligation => ({
     id: '1',

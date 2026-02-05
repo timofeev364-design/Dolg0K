@@ -2,8 +2,8 @@
  * Risk calculation tests
  */
 
-import { calculateRisk, getDaysUntilSalary, isPaymentBeforeSalary } from '@babki/core';
-import type { Obligation } from '@babki/core';
+import { calculateRisk, getDaysUntilSalary, isPaymentBeforeSalary } from '../src/core';
+import type { Obligation } from '../src/core';
 
 const createObligation = (overrides: Partial<Obligation> = {}): Obligation => ({
     id: '1',

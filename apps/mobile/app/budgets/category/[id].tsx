@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-n
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { colors, spacing, typography, radius } from '@/theme';
-import { Budget, BudgetSpend, calculateBudgetMetrics } from '@babki/core';
+import { Budget, BudgetSpend, calculateBudgetMetrics } from '../../../src/core';
 import { TechGrid, AmbientHeader, GlassCard } from '@/components/ui/PremiumComponents';
 import { ListRow, Button } from '@/components';
 

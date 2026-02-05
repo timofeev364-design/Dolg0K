@@ -5,8 +5,8 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import type { RiskLevel } from '@babki/core';
-import { getRiskColor, getRiskLabel } from '@babki/core';
+import type { RiskLevel } from '../core';
+import { getRiskColor, getRiskLabel } from '../core';
 import { spacing, radius, typography } from '../theme';
 
 interface RiskBadgeProps {

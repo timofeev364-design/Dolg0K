@@ -1,20 +1,25 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "strict": true,
-    "jsx": "react-native",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": [
       "ES2020",
       "DOM"
     ],
-    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": true,
+    "jsx": "react-native",
     "allowSyntheticDefaultImports": true,
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@babki/core": [
-        "../../packages/core/src"
       ]
     },
     "baseUrl": "."

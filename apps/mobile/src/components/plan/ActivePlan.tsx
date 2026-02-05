@@ -9,7 +9,7 @@ import { colors, spacing, radius, typography } from '../../theme';
 import { ProgressBar, Button, ListRow } from '..';
 import { Orb, GlassCard, TechGrid } from '../ui/PremiumComponents';
 import { getStorage } from '../../db';
-import type { PlanInstance, PlanAction } from '@babki/core';
+import type { PlanInstance, PlanAction } from '../../core';
 
 interface ActivePlanProps {
     plan: PlanInstance;

@@ -8,7 +8,7 @@ import {
     PlanType,
     HORIZON_LABELS,
     PLAN_TYPE_LABELS
-} from '@babki/core';
+} from '../../src/core';
 
 export default function PlanCatalogScreen() {
     const router = useRouter();

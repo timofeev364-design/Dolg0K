@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, TouchableOpacity, ViewStyle } from 'react-native';
 import { colors, spacing, typography } from '../theme';
 import { Feather } from '@expo/vector-icons';
-import type { Obligation } from '@babki/core';
-import { CATEGORY_LABELS } from '@babki/core';
+import type { Obligation } from '../core';
+import { CATEGORY_LABELS } from '../core';
 
 // Local helper 
 function getCategoryColorLocal(category: string): string {

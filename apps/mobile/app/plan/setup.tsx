@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ALL_PLAN_TEMPLATES, HORIZON_LABELS } from '@babki/core';
+import { ALL_PLAN_TEMPLATES, HORIZON_LABELS } from '../../src/core';
 import { createPlanInstance } from '../../src/db/repositories';
 import { colors, spacing, borderRadius, fontSize, fontWeight } from '../../src/theme';
 import { Button } from '../../src/components';

@@ -8,7 +8,7 @@ import { useFocusEffect } from 'expo-router';
 import { ActivePlan, PlanCatalog } from '../../src/components';
 import { getStorage } from '../../src/db';
 import { colors } from '../../src/theme';
-import type { PlanInstance } from '@babki/core';
+import type { PlanInstance } from '../../src/core';
 
 export default function PlanScreen() {
     const [loading, setLoading] = useState(true);
