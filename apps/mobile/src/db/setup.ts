@@ -3,8 +3,23 @@
  * Инициализация expo-sqlite и drizzle-orm
  */
 
-import { drizzle } from 'drizzle-orm/expo-sqlite';
-import { openDatabaseSync } from 'expo-sqlite';
+import { Platform } from 'react-native';
+import * as schema from './schema';
+
+// Database name
+const DB_NAME = 'babki.db';
+
+let drizzle: any;
+let openDatabaseSync: any;
+
+if (Platform.OS !== 'web') {
+  try {
+    drizzle = require('drizzle-orm/expo-sqlite').drizzle;
+    openDatabaseSync = require('expo-sqlite').openDatabaseSync;
+  } catch (e) {
+    console.warn('SQLite setup failed:', e);
+  }
+}
 import * as schema from './schema';
 
 // Database name
