@@ -4,21 +4,18 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Tabs, Slot, useRouter } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, StyleSheet, Platform, useWindowDimensions } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { getStorage } from '../src/db';
 import { colors } from '../src/theme';
-import { Sidebar } from '../src/components';
 import { FallingMoney } from '../src/components/ui/FallingMoney';
 
 import { FinancialProvider } from '../src/context/FinancialContext';
 
 export default function RootLayout() {
     const [isReady, setIsReady] = useState(false);
-    const { width } = useWindowDimensions();
-    const isDesktop = width >= 768;
     const router = useRouter();
 
     useEffect(() => {
@@ -93,192 +90,181 @@ export default function RootLayout() {
         `}</style>
     ) : null;
 
-    if (isDesktop) {
-        return (
-            <FinancialProvider>
-                <View style={styles.desktopContainer}>
-                    {WebStyles}
-                    <FallingMoney />
-                    <StatusBar style="light" backgroundColor={colors.bg0} />
-                    <Sidebar />
-                    <View style={styles.desktopContent}>
-                        <Slot />
-                    </View>
-                </View>
-            </FinancialProvider>
-        );
-    }
-
-    // Mobile Layout: Tabs
+    // Unified Vertical Layout (Mobile First)
     return (
         <FinancialProvider>
             {WebStyles}
-            <FallingMoney />
-            <StatusBar style="light" backgroundColor={colors.bg0} />
-            <Tabs
-                screenOptions={{
-                    headerStyle: {
-                        backgroundColor: colors.bg0,
-                        borderBottomWidth: 1,
-                        borderBottomColor: colors.stroke1,
-                        shadowOpacity: 0,
-                        elevation: 0,
-                    },
-                    headerTintColor: colors.textPrimary,
-                    headerTitleStyle: {
-                        fontWeight: '600',
-                        fontSize: 17,
-                        color: colors.textPrimary,
-                    },
-                    tabBarStyle: {
-                        backgroundColor: colors.bg1,
-                        borderTopWidth: 1,
-                        borderTopColor: colors.stroke1,
-                        height: 60,
-                        paddingBottom: 8,
-                        paddingTop: 8,
-                        elevation: 0,
-                        shadowOpacity: 0,
-                    },
-                    tabBarActiveTintColor: colors.accent,
-                    tabBarInactiveTintColor: colors.textTertiary,
-                    tabBarShowLabel: true,
-                    tabBarLabelStyle: {
-                        fontSize: 11,
-                        fontWeight: '500',
-                    }
-                }}
-            >
-                <Tabs.Screen
-                    name="index"
-                    options={{
-                        title: 'Обзор',
-                        tabBarIcon: ({ color }) => <Feather name="grid" size={20} color={color} />,
+            <View style={styles.appContainer}>
+                <FallingMoney />
+                <StatusBar style="light" backgroundColor={colors.bg0} />
+                <Tabs
+                    screenOptions={{
+                        headerStyle: {
+                            backgroundColor: colors.bg0,
+                            borderBottomWidth: 1,
+                            borderBottomColor: colors.stroke1,
+                            shadowOpacity: 0,
+                            elevation: 0,
+                        },
+                        headerTintColor: colors.textPrimary,
+                        headerTitleStyle: {
+                            fontWeight: '600',
+                            fontSize: 17,
+                            color: colors.textPrimary,
+                        },
+                        tabBarStyle: {
+                            backgroundColor: colors.bg1,
+                            borderTopWidth: 1,
+                            borderTopColor: colors.stroke1,
+                            height: 60,
+                            paddingBottom: 8,
+                            paddingTop: 8,
+                            elevation: 0,
+                            shadowOpacity: 0,
+                        },
+                        tabBarActiveTintColor: colors.accent,
+                        tabBarInactiveTintColor: colors.textTertiary,
+                        tabBarShowLabel: true,
+                        tabBarLabelStyle: {
+                            fontSize: 11,
+                            fontWeight: '500',
+                        }
                     }}
-                />
-                <Tabs.Screen
-                    name="payments"
-                    options={{
-                        title: 'Платежи',
-                        tabBarIcon: ({ color }) => <Feather name="list" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="budgets"
-                    options={{
-                        title: 'Бюджеты',
-                        tabBarIcon: ({ color }) => <Feather name="pie-chart" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="plan"
-                    options={{
-                        href: null,
-                        title: 'План',
-                        tabBarIcon: ({ color }) => <Feather name="target" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="templates"
-                    options={{
-                        title: 'Шаблоны',
-                        tabBarIcon: ({ color }) => <Feather name="copy" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="debts/index"
-                    options={{
-                        title: 'Долги',
-                        tabBarIcon: ({ color }) => <Feather name="credit-card" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="goals/index"
-                    options={{
-                        title: 'Цели',
-                        tabBarIcon: ({ color }) => <Feather name="award" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="score/index"
-                    options={{
-                        title: 'Рейтинг',
-                        tabBarIcon: ({ color }) => <Feather name="activity" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="payday/index"
-                    options={{
-                        title: 'Зарплата',
-                        tabBarIcon: ({ color }) => <Feather name="dollar-sign" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="shared/index"
-                    options={{
-                        href: null,
-                        title: 'Общее',
-                        tabBarIcon: ({ color }) => <Feather name="users" size={20} color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="settings"
-                    options={{
-                        title: 'Настройки',
-                        tabBarIcon: ({ color }) => <Feather name="settings" size={20} color={color} />,
-                    }}
-                />
-                {/* Hidden screens */}
-                <Tabs.Screen
-                    name="add-payment"
-                    options={{
-                        href: null,
-                        title: 'Добавить платёж',
-                    }}
-                />
-                <Tabs.Screen
-                    name="panic"
-                    options={{
-                        href: null,
-                        title: 'Экстренная помощь',
-                    }}
-                />
-                <Tabs.Screen
-                    name="onboarding"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                        tabBarStyle: { display: 'none' },
-                    }}
-                />
-                <Tabs.Screen
-                    name="financial-test"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                        tabBarStyle: { display: 'none' },
-                    }}
-                />
-            </Tabs>
+                >
+                    <Tabs.Screen
+                        name="index"
+                        options={{
+                            title: 'Обзор',
+                            tabBarIcon: ({ color }) => <Feather name="grid" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="payments"
+                        options={{
+                            title: 'Платежи',
+                            tabBarIcon: ({ color }) => <Feather name="list" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="budgets"
+                        options={{
+                            title: 'Бюджеты',
+                            tabBarIcon: ({ color }) => <Feather name="pie-chart" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="plan"
+                        options={{
+                            href: null,
+                            title: 'План',
+                            tabBarIcon: ({ color }) => <Feather name="target" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="templates"
+                        options={{
+                            title: 'Шаблоны',
+                            tabBarIcon: ({ color }) => <Feather name="copy" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="debts/index"
+                        options={{
+                            title: 'Долги',
+                            tabBarIcon: ({ color }) => <Feather name="credit-card" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="goals/index"
+                        options={{
+                            title: 'Цели',
+                            tabBarIcon: ({ color }) => <Feather name="award" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="score/index"
+                        options={{
+                            title: 'Рейтинг',
+                            tabBarIcon: ({ color }) => <Feather name="activity" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="payday/index"
+                        options={{
+                            title: 'Зарплата',
+                            tabBarIcon: ({ color }) => <Feather name="dollar-sign" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="shared/index"
+                        options={{
+                            href: null,
+                            title: 'Общее',
+                            tabBarIcon: ({ color }) => <Feather name="users" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="settings"
+                        options={{
+                            title: 'Настройки',
+                            tabBarIcon: ({ color }) => <Feather name="settings" size={20} color={color} />,
+                        }}
+                    />
+                    {/* Hidden screens */}
+                    <Tabs.Screen
+                        name="add-payment"
+                        options={{
+                            href: null,
+                            title: 'Добавить платёж',
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="panic"
+                        options={{
+                            href: null,
+                            title: 'Экстренная помощь',
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="onboarding"
+                        options={{
+                            href: null,
+                            headerShown: false,
+                            tabBarStyle: { display: 'none' },
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="financial-test"
+                        options={{
+                            href: null,
+                            headerShown: false,
+                            tabBarStyle: { display: 'none' },
+                        }}
+                    />
+                </Tabs>
+            </View>
         </FinancialProvider>
     );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
     loading: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.bg0,
     },
-    desktopContainer: {
+    appContainer: {
         flex: 1,
-        flexDirection: 'row',
-        backgroundColor: colors.bg0,
+        width: '100%',
+        maxWidth: 480, // Mobile width constraint
+        alignSelf: 'center',
+        backgroundColor: colors.bg0, // Ensure app bg is solid within the "phone"
+        // On web, we might want a border or shadow to separate it from the nebula bg,
+        // but simple full-height is cleaner for now.
+        ...(Platform.OS === 'web' ? {
+            height: '100vh',
+            boxShadow: '0 0 40px rgba(0,0,0,0.5)', // Nice shadow to pop from background
+        } : {})
     },
-    desktopContent: {
-        flex: 1,
-        // No padding here, each screen handles its container max-width
-        // But we ensure it takes remaining space
-    }
 });

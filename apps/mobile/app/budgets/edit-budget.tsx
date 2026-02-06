@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
         borderColor: colors.stroke1,
         borderRadius: radius.ui,
         padding: spacing.md,
-        color: colors.textPrimary,
         ...typography.body,
     },
     row: {

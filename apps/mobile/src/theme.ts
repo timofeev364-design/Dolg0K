@@ -51,6 +51,7 @@ export const colors = {
     border: 'rgba(255, 255, 255, 0.06)',
     text: '#EAF0F7',
     error: '#FF5A6B',
+    textMuted: '#748196', // Alias for textTertiary
 };
 
 export const spacing = {
@@ -70,6 +71,7 @@ export const radius = {
     ui: 16, // Chunkier UI
     card: 20, // More rounded cards
     round: 999,
+    xl: 24,
 };
 
 export const typography = {
@@ -83,9 +85,9 @@ export const typography = {
     caption: { fontSize: 13, fontWeight: '500' as const, lineHeight: 18, color: colors.textSecondary },
     micro: { fontSize: 12, fontWeight: '500' as const, lineHeight: 16, color: colors.textTertiary },
     // Tabular Numbers
-    amountL: { fontSize: 28, fontWeight: '700' as const, lineHeight: 32, fontVariant: ['tabular-nums'] as const, color: colors.textPrimary },
-    amountM: { fontSize: 20, fontWeight: '600' as const, lineHeight: 24, fontVariant: ['tabular-nums'] as const, color: colors.textPrimary },
-    amountS: { fontSize: 16, fontWeight: '600' as const, lineHeight: 20, fontVariant: ['tabular-nums'] as const, color: colors.textPrimary },
+    amountL: { fontSize: 28, fontWeight: '700' as const, lineHeight: 32, fontVariant: ['tabular-nums'], color: colors.textPrimary },
+    amountM: { fontSize: 20, fontWeight: '600' as const, lineHeight: 24, fontVariant: ['tabular-nums'], color: colors.textPrimary },
+    amountS: { fontSize: 16, fontWeight: '600' as const, lineHeight: 20, fontVariant: ['tabular-nums'], color: colors.textPrimary },
 };
 
 // Premium Material Effects
@@ -140,6 +142,7 @@ export const borderRadius = {
     md: radius.ui,
     lg: radius.card,
     full: radius.round,
+    xl: 24,
 };
 
 export const fontSize = {

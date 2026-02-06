@@ -32,7 +32,7 @@ export default function PlanCatalogScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container as any}>
             <View style={styles.header}>
                 <Text style={styles.title}>Каталог планов</Text>
                 <Text style={styles.subtitle}>Выберите стратегию под вашу ситуацию</Text>
@@ -135,7 +135,7 @@ function getIntensityDisplay(intensity: string) {
 
 import { colors, spacing, borderRadius, fontSize, fontWeight } from '../../src/theme';
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
     container: {
         flex: 1,
         backgroundColor: colors.background,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: fontSize.xxl,
-        fontWeight: fontWeight.bold,
+        fontWeight: fontWeight.bold as any,
         color: colors.text,
     },
     subtitle: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     },
     chipTextActive: {
         color: '#FFFFFF',
-        fontWeight: fontWeight.semibold,
+        fontWeight: fontWeight.semibold as any,
     },
     listContent: {
         padding: spacing.md,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     },
     cardTitle: {
         fontSize: fontSize.lg,
-        fontWeight: fontWeight.bold,
+        fontWeight: fontWeight.bold as any,
         color: colors.text,
         marginBottom: spacing.xs,
     },
@@ -238,14 +238,14 @@ const styles = StyleSheet.create({
     badge_stability: { backgroundColor: '#F3E8FF' },
     badgeText: {
         fontSize: fontSize.xs,
-        fontWeight: fontWeight.bold,
+        fontWeight: fontWeight.bold as any,
         color: colors.text, // or specific contrast
         textTransform: 'uppercase',
     },
     horizonText: {
         fontSize: fontSize.sm,
         color: colors.textMuted,
-        fontWeight: fontWeight.medium,
+        fontWeight: fontWeight.medium as any,
     },
     cardFooter: {
         flexDirection: 'row',
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     },
     intensityVal: {
         color: colors.text,
-        fontWeight: fontWeight.medium,
+        fontWeight: fontWeight.medium as any,
     },
     arrow: {
         fontSize: fontSize.lg,
