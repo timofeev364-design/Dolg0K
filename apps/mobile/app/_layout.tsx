@@ -5,16 +5,34 @@
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { getStorage } from '../src/db';
 import { colors } from '../src/theme';
 import { FallingMoney } from '../src/components/ui/FallingMoney';
 import { FinancialProvider } from '../src/context/FinancialContext';
+
+function CustomDrawerContent(props: any) {
+    return (
+        <DrawerContentScrollView {...props} style={{ backgroundColor: colors.bg1 }}>
+            <View style={{ padding: 20, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: colors.stroke1, marginBottom: 10 }}>
+                {/* Logo or App Name placeholder */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <View style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' }}>
+                        <Feather name="activity" size={20} color={colors.bg0} />
+                    </View>
+                    <Text style={{ fontSize: 20, fontWeight: '700', color: colors.textPrimary, letterSpacing: -0.5 }}>Babki</Text>
+                </View>
+            </View>
+            <DrawerItemList {...props} />
+        </DrawerContentScrollView>
+    );
+}
 
 export default function RootLayout() {
     const [isReady, setIsReady] = useState(false);
@@ -97,6 +115,7 @@ export default function RootLayout() {
                     <StatusBar style="light" backgroundColor={colors.bg0} />
 
                     <Drawer
+                        drawerContent={(props) => <CustomDrawerContent {...props} />}
                         screenOptions={{
                             headerShown: true,
                             headerStyle: {
@@ -118,6 +137,7 @@ export default function RootLayout() {
                                 borderRightWidth: 1,
                                 borderRightColor: colors.stroke1,
                             },
+                            drawerType: 'front', // Force overlay behavior for mobile feel
                             drawerActiveTintColor: colors.accent,
                             drawerInactiveTintColor: colors.textSecondary,
                             drawerLabelStyle: {
@@ -125,7 +145,7 @@ export default function RootLayout() {
                                 fontSize: 14,
                                 fontWeight: '500',
                             },
-                            sceneContainerStyle: {
+                            sceneStyle: { // Renamed from sceneContainerStyle for v7
                                 backgroundColor: colors.bg0,
                             },
                         }}

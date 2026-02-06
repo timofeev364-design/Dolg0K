@@ -23,13 +23,8 @@ export default function DashboardScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [balance, setBalance] = useState(0);
 
-    // Menu State
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const toggleMenu = () => {
-        // Simple animation
-        setIsMenuOpen(prev => !prev);
-    };
+    const [refreshing, setRefreshing] = useState(false);
+    const [balance, setBalance] = useState(0);
 
     const loadData = useCallback(async () => {
         const storage = getStorage();
@@ -80,21 +75,8 @@ export default function DashboardScreen() {
             <AmbientHeader />
 
             {/* Header Row (Interactive) */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={toggleMenu} activeOpacity={0.7} style={styles.headerTitleRow}>
-                    <View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <Text style={styles.headerTitle}>Обзор</Text>
-                            <Feather
-                                name={isMenuOpen ? "chevron-up" : "chevron-down"}
-                                size={28}
-                                color={colors.accent}
-                            />
-                        </View>
-                        <Text style={styles.headerSubtitle}>Финансовая сводка</Text>
-                    </View>
-                </TouchableOpacity>
-
+            {/* Header Row (Removed - using Drawer Header) */}
+            <View style={{ marginBottom: spacing.lg }}>
                 {riskResult && (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
                         {/* 3D Orb for Status */}
@@ -111,43 +93,7 @@ export default function DashboardScreen() {
                 )}
             </View>
 
-            {/* Collapsible Menu */}
-            {isMenuOpen && (
-                <View style={styles.menuContainer}>
-                    <GlassCard variant="surface2" style={styles.menuCard}>
-                        <View style={styles.menuGrid}>
-                            <Button
-                                title="Фин. Тест"
-                                variant="primary"
-                                onPress={() => { toggleMenu(); router.push('/financial-test'); }}
-                                icon={<Feather name="check-square" size={18} color={colors.textOnAccent} />}
-                                style={styles.menuBtn}
-                            />
-                            <Button
-                                title="Добавить"
-                                variant="primary"
-                                onPress={() => { toggleMenu(); router.push('/add-payment'); }}
-                                icon={<Feather name="plus" size={18} color={colors.textOnAccent} />}
-                                style={styles.menuBtn}
-                            />
-                            <Button
-                                title="Бюджеты"
-                                variant="secondary"
-                                onPress={() => { toggleMenu(); router.push('/budgets'); }}
-                                icon={<Feather name="pie-chart" size={18} color={colors.textPrimary} />}
-                                style={styles.menuBtn}
-                            />
-                            <Button
-                                title="Шаблоны"
-                                variant="ghost"
-                                onPress={() => { toggleMenu(); router.push('/templates'); }}
-                                icon={<Feather name="copy" size={18} color={colors.accent} />}
-                                style={styles.menuBtn}
-                            />
-                        </View>
-                    </GlassCard>
-                </View>
-            )}
+
 
             {/* KPI Row (3-4 cards) */}
             <View style={styles.kpiRow}>
