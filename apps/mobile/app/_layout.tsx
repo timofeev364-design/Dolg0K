@@ -3,15 +3,17 @@
  * Responsive: Sidebar (Desktop) / Tabs (Mobile)
  */
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Drawer } from 'expo-router/drawer';
+
 import React, { useEffect, useState } from 'react';
-import { Tabs, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { getStorage } from '../src/db';
 import { colors } from '../src/theme';
 import { FallingMoney } from '../src/components/ui/FallingMoney';
-
 import { FinancialProvider } from '../src/context/FinancialContext';
 
 export default function RootLayout() {
@@ -27,9 +29,6 @@ export default function RootLayout() {
                 // Check Onboarding
                 const settings = await storage.getSettings();
                 if (!settings.onboardingCompleted) {
-                    // Avoid redirect loop if already there
-                    // We can't easily check segments inside init async immediately, 
-                    // but we can trust this runs once on mount.
                     setTimeout(() => {
                         router.replace('/onboarding');
                     }, 100);
@@ -57,7 +56,6 @@ export default function RootLayout() {
         <style type="text/css">{`
             body {
                 background-color: ${colors.bg0};
-                /* Complex layered background: Noise + Deep Nebulas + Linear Darkening */
                 background-image: 
                     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"),
                     radial-gradient(circle at 20% 10%, rgba(110, 231, 255, 0.25), transparent 50%),
@@ -66,7 +64,6 @@ export default function RootLayout() {
                     linear-gradient(180deg, ${colors.bg1} 0%, #000000 100%);
                 background-attachment: fixed;
                 background-blend-mode: overlay, normal, normal;
-                /* Mobile App Feel */
                 user-select: none;
                 -webkit-user-select: none;
                 -webkit-touch-callout: none;
@@ -90,159 +87,162 @@ export default function RootLayout() {
         `}</style>
     ) : null;
 
-    // Unified Vertical Layout (Mobile First)
+    // Unified Vertical Layout (Mobile First + Drawer)
     return (
         <FinancialProvider>
             {WebStyles}
-            <View style={styles.appContainer}>
-                <FallingMoney />
-                <StatusBar style="light" backgroundColor={colors.bg0} />
-                <Tabs
-                    screenOptions={{
-                        headerStyle: {
-                            backgroundColor: colors.bg0,
-                            borderBottomWidth: 1,
-                            borderBottomColor: colors.stroke1,
-                            shadowOpacity: 0,
-                            elevation: 0,
-                        },
-                        headerTintColor: colors.textPrimary,
-                        headerTitleStyle: {
-                            fontWeight: '600',
-                            fontSize: 17,
-                            color: colors.textPrimary,
-                        },
-                        tabBarStyle: {
-                            backgroundColor: colors.bg1,
-                            borderTopWidth: 1,
-                            borderTopColor: colors.stroke1,
-                            height: 60,
-                            paddingBottom: 8,
-                            paddingTop: 8,
-                            elevation: 0,
-                            shadowOpacity: 0,
-                        },
-                        tabBarActiveTintColor: colors.accent,
-                        tabBarInactiveTintColor: colors.textTertiary,
-                        tabBarShowLabel: true,
-                        tabBarLabelStyle: {
-                            fontSize: 11,
-                            fontWeight: '500',
-                        }
-                    }}
-                >
-                    <Tabs.Screen
-                        name="index"
-                        options={{
-                            title: 'Обзор',
-                            tabBarIcon: ({ color }) => <Feather name="grid" size={20} color={color} />,
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <View style={styles.appContainer}>
+                    <FallingMoney />
+                    <StatusBar style="light" backgroundColor={colors.bg0} />
+
+                    <Drawer
+                        screenOptions={{
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.bg0,
+                                borderBottomWidth: 1,
+                                borderBottomColor: colors.stroke1,
+                                shadowOpacity: 0,
+                                elevation: 0,
+                            },
+                            headerTintColor: colors.textPrimary,
+                            headerTitleStyle: {
+                                fontWeight: '600',
+                                fontSize: 17,
+                                color: colors.textPrimary,
+                            },
+                            drawerStyle: {
+                                backgroundColor: colors.bg1,
+                                width: 280,
+                                borderRightWidth: 1,
+                                borderRightColor: colors.stroke1,
+                            },
+                            drawerActiveTintColor: colors.accent,
+                            drawerInactiveTintColor: colors.textSecondary,
+                            drawerLabelStyle: {
+                                marginLeft: -20,
+                                fontSize: 14,
+                                fontWeight: '500',
+                            },
+                            sceneContainerStyle: {
+                                backgroundColor: colors.bg0,
+                            },
                         }}
-                    />
-                    <Tabs.Screen
-                        name="payments"
-                        options={{
-                            title: 'Платежи',
-                            tabBarIcon: ({ color }) => <Feather name="list" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="budgets"
-                        options={{
-                            title: 'Бюджеты',
-                            tabBarIcon: ({ color }) => <Feather name="pie-chart" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="plan"
-                        options={{
-                            href: null,
-                            title: 'План',
-                            tabBarIcon: ({ color }) => <Feather name="target" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="templates"
-                        options={{
-                            title: 'Шаблоны',
-                            tabBarIcon: ({ color }) => <Feather name="copy" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="debts/index"
-                        options={{
-                            title: 'Долги',
-                            tabBarIcon: ({ color }) => <Feather name="credit-card" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="goals/index"
-                        options={{
-                            title: 'Цели',
-                            tabBarIcon: ({ color }) => <Feather name="award" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="score/index"
-                        options={{
-                            title: 'Рейтинг',
-                            tabBarIcon: ({ color }) => <Feather name="activity" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="payday/index"
-                        options={{
-                            title: 'Зарплата',
-                            tabBarIcon: ({ color }) => <Feather name="dollar-sign" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="shared/index"
-                        options={{
-                            href: null,
-                            title: 'Общее',
-                            tabBarIcon: ({ color }) => <Feather name="users" size={20} color={color} />,
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="settings"
-                        options={{
-                            title: 'Настройки',
-                            tabBarIcon: ({ color }) => <Feather name="settings" size={20} color={color} />,
-                        }}
-                    />
-                    {/* Hidden screens */}
-                    <Tabs.Screen
-                        name="add-payment"
-                        options={{
-                            href: null,
-                            title: 'Добавить платёж',
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="panic"
-                        options={{
-                            href: null,
-                            title: 'Экстренная помощь',
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="onboarding"
-                        options={{
-                            href: null,
-                            headerShown: false,
-                            tabBarStyle: { display: 'none' },
-                        }}
-                    />
-                    <Tabs.Screen
-                        name="financial-test"
-                        options={{
-                            href: null,
-                            headerShown: false,
-                            tabBarStyle: { display: 'none' },
-                        }}
-                    />
-                </Tabs>
-            </View>
+                    >
+                        <Drawer.Screen
+                            name="index"
+                            options={{
+                                title: 'Обзор',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="grid" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="payments"
+                            options={{
+                                title: 'Платежи',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="list" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="budgets"
+                            options={{
+                                title: 'Бюджеты',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="pie-chart" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="plan"
+                            options={{
+                                title: 'План',
+                                drawerItemStyle: { display: 'none' }, // Keep hidden or show?
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="target" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="templates"
+                            options={{
+                                title: 'Шаблоны',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="copy" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="debts/index"
+                            options={{
+                                title: 'Долги',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="credit-card" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="goals/index"
+                            options={{
+                                title: 'Цели',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="award" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="score/index"
+                            options={{
+                                title: 'Рейтинг',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="activity" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="payday/index"
+                            options={{
+                                title: 'Зарплата',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="dollar-sign" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="shared/index"
+                            options={{
+                                title: 'Общее',
+                                drawerItemStyle: { display: 'none' },
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="users" size={20} color={color} />,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="settings"
+                            options={{
+                                title: 'Настройки',
+                                drawerIcon: ({ color }: { color: string }) => <Feather name="settings" size={20} color={color} />,
+                            }}
+                        />
+                        {/* Hidden screens (redirects or modals) */}
+                        <Drawer.Screen
+                            name="add-payment"
+                            options={{
+                                title: 'Добавить платёж',
+                                drawerItemStyle: { display: 'none' },
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="panic"
+                            options={{
+                                title: 'Экстренная помощь',
+                                drawerItemStyle: { display: 'none' },
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="onboarding"
+                            options={{
+                                headerShown: false,
+                                drawerItemStyle: { display: 'none' },
+                                swipeEnabled: false,
+                            }}
+                        />
+                        <Drawer.Screen
+                            name="financial-test"
+                            options={{
+                                headerShown: false,
+                                drawerItemStyle: { display: 'none' },
+                                swipeEnabled: false,
+                            }}
+                        />
+                    </Drawer>
+                </View>
+            </GestureHandlerRootView>
         </FinancialProvider>
     );
 }
